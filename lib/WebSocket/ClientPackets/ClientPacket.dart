@@ -3,7 +3,8 @@ part of FinalEarthCrawler;
 // TODO: Make ID CLIENT_PACKETS not the int index of this enum.
 enum CLIENT_PACKETS {
   SUBSCRIBE_TO_EVENT,
-  UNSUBSCRIBE_FROM_EVENT
+  UNSUBSCRIBE_FROM_EVENT,
+  GET_USER_DATA
 }
 
 /// TODO: Work out a better way of doing this.

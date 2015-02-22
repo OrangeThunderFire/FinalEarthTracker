@@ -1,6 +1,6 @@
 part of FinalEarthCrawler;
 abstract class AttackLogRepository {
-  void store (FacilityChangeEvent event);
+  void store (AttackMadeEvent event);
 }
 
 class MongoAttackLogRespository implements AttackLogRepository {
@@ -18,6 +18,7 @@ class MongoAttackLogRespository implements AttackLogRepository {
       if (response["err"] != null) {
         throw response.err;
       }
+
 
       return response;
     }

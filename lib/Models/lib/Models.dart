@@ -14,6 +14,7 @@ part 'Unit.dart';
 part 'UnitAmount.dart';
 part 'World.dart';
 part 'AttackLog.dart';
+part 'User.dart';
 
 class FinalEarthModel extends Boilerplate {
 

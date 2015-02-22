@@ -2,25 +2,21 @@ part of FinalEarthModels;
 
 class AttackLog extends FinalEarthModel {
   int logID;
-  String attackerName;
-  String defenderName;
-  int attackerID;
-  int defenderID;
+  User attacker;
+  User defender;
   List<UnitAmount> attackerUnitData;
   List<UnitAmount> defenderUnitData;
   int attackerLosses;
   int defenderLosses;
   DateTime time;
 
-  AttackLog (this.logID, this.time, this.attackerName, this.defenderName, this.attackerID,
-             this.defenderID, this.attackerUnitData, this.defenderUnitData,
+  AttackLog (this.logID, this.time,this.attacker, this.defender, this.attackerUnitData, this.defenderUnitData,
              this.attackerLosses, this.defenderLosses);
 
   AttackLog.fromJson (Map log) {
     this.logID = log["logID"];
-    this.attackerName = log["attackerName"];
-    this.defenderName = log["defenderName"];
-    this.attackerID = log["attackerID"];
+    this.attacker = new User.fromJson(log["attacker"]);
+    this.defender = new User.fromJson(log["defender"]);
     this.attackerLosses = log["attackerLosses"];
     this.defenderLosses = log["defenderLosses"];
     this.time = new DateTime.fromMillisecondsSinceEpoch(log["time"]);
@@ -37,6 +33,8 @@ class AttackLog extends FinalEarthModel {
   Map toMap () {
     Map fields = this.fields;
     fields["time"] = this.time.millisecondsSinceEpoch;
+    fields["attacker"] = this.attacker.toMap();
+    fields["defender"] = this.defender.toMap();
     fields["attackerUnitData"] = new List();
     fields["defenderUnitData"] = new List();
     this.attackerUnitData.forEach((UnitAmount uAmt) {

@@ -25,7 +25,10 @@ class RequesterClient extends http.BaseClient {
     if (_cookieJar.containsKey(request.url.host)) {
       String cookieStr =  _cookieJar[request.url.host].map((e) => "${Uri.decodeComponent(e.name)}=${e.value}").join("; ");
       request.headers["cookie"] = cookieStr;
+      print(cookieStr);
     }
+    request.headers["origin"] = "http://${request.url.host}";
+    request.headers["user-agent"] = "Mozilla/5.0 (Windows NT 6.4; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36";
     return _inner.send(request);
   }
 

@@ -10,8 +10,6 @@ import "package:mongo_dart/mongo_dart.dart";
 import 'package:FinalEarthCrawler/FinalEarthCrawler.dart';
 
 
-import 'package:sembast/sembast_io.dart';
-import 'package:sembast/sembast.dart';
 import "package:args/args.dart";
 
 
@@ -19,20 +17,13 @@ main(List<String> args) async {
   ArgParser parser = new ArgParser();
   parser.addOption('username', abbr: 'u');
   parser.addOption('password', abbr: 'p');
+  parser.addOption('logid', abbr: 'l');
   Map results = parser.parse(args);
 
-  String dbPath ="quickDb.db";
-  DatabaseFactory dbFactory = ioDatabaseFactory;
-  Database db = await dbFactory.openDatabase(dbPath);
-  int logID = await db.get("logID");
-  if (logID == null) {
-    logID = 1;
-    await db.put(1, "logID");
-  }
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((LogRecord rec) {
     if (rec.loggerName == "Connection" || rec.loggerName == "ConnectionManager" || rec.loggerName == "MongoMessageTransformer") return;
-    print('${rec.level.name}: [${rec.loggerName}] ${rec.time}: ${rec.message}');
+    //print('${rec.level.name}: [${rec.loggerName}] ${rec.time}: ${rec.message}');
   });
   ClientPacket.init();
 
@@ -41,10 +32,9 @@ main(List<String> args) async {
 //
   FinalEarthCrawler fec = new FinalEarthCrawler(results["username"], results["password"]);
 
-  AttackMadeDispatcher.logID = logID;
+  AttackMadeDispatcher.logID = int.parse(results["logid"], onError: (String src) { return 1; });
   MongoAttackLogRespository attackLogRepo = new MongoAttackLogRespository();
   fec.onAttackMade.listen((AttackMadeEvent event) {
-    db.put(event.attackLog.logID, "logID");
     attackLogRepo.store(event);
     wsh.clients.forEach((String key, Client client) {
       List<String> subscribedEvents = client.getMetadataOrDefault("subscribed_events", new List<String> ());

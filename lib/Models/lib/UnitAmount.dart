@@ -1,8 +1,12 @@
 part of FinalEarthModels;
 
 class UnitAmount extends FinalEarthModel {
+  /// Unit amount that was lost in attack - Misleading name: Couldnt change due to db structure.
   int amount;
+  /// This is the unit total before amount is subtracted
   int left;
+  // The actual total units they have of this type
+  get total => left - amount;
   Unit unit;
   UnitAmount (this.amount, this.left, this.unit);
 
