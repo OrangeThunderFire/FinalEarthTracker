@@ -1,0 +1,20 @@
+library FinalEarthModels;
+
+import "dart:convert";
+import "dart:async";
+import "dart:collection";
+import "package:intl/intl.dart";
+import "package:boilerplate/boilerplate.dart";
+import "../../Exceptions/FinalEarthException.dart";
+
+part 'Country.dart';
+part 'Location.dart';
+part 'Team.dart';
+part 'Unit.dart';
+part 'UnitAmount.dart';
+part 'World.dart';
+part 'AttackLog.dart';
+
+class FinalEarthModel extends Boilerplate {
+
+}

@@ -1,0 +1,19 @@
+name: FinalEarthModels
+version: 0.0.1
+description: Models for FE
+#author: <your name> <email@example.com>
+#homepage: https://www.example.com
+environment:
+  sdk: '>=1.0.0 <2.0.0'
+dependencies:
+  logging: any
+  boilerplate: any
+  mongo_dart: any
+  uuid: any
+  intl: any
+  http: any
+  html5lib: any
+dev_dependencies:
+  unittest: any
+  mock: any
+

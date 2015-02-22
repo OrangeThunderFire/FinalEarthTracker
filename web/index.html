@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>World Map!</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div id="map" class="map">
+
+    </div>
+    <div class="console">
+        <ul id="console">
+        </ul>
+    </div>
+    <!-- TODO: Gulp -->
+    <svg height="0" width="0">
+        <defs>
+            <pattern id="axis" patternUnits="userSpaceOnUse" width="2" height="8">
+                <image width="2" height="8" xlink:href="imgs/bg_axis.png"></image>
+            </pattern>
+            <pattern id="allies" patternUnits="userSpaceOnUse" width="2" height="8">
+                <image width="2" height="8" xlink:href="imgs/bg_allies.png"></image>
+            </pattern>
+            <pattern id="neutral" patternUnits="userSpaceOnUse" width="2" height="8">
+                <image width="2" height="8" xlink:href="imgs/bg_neutral.png"></image>
+            </pattern>
+            <filter id="glitch" x="0" y="0">
+                <feColorMatrix in="SourceGraphic" mode="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r" />
+
+                <feOffset in="r" result="r" dx="-6">
+                    <animate attributeName="dx" attributeType="XML" values="0; -5; 0; -18; -2; -4; 0 ;-3; 0" dur="0.2s"  repeatCount="1"/>
+                </feOffset>
+                <feColorMatrix in="SourceGraphic" mode="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+                <feOffset in="g" result="g" dx="-10" dy="1">
+                    <animate attributeName="dx" attributeType="XML" values="0; 0; 0; -3; 0; 8; 0 ;-1; 0" dur="0.15s" repeatCount="1"/>
+                </feOffset>
+                <feColorMatrix in="SourceGraphic" mode="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+                <feOffset in="b" result="b" dx="5" dy="2">
+                    <animate attributeName="dx" attributeType="XML" values="0; 3; -1; 4; 0; 2; 0 ;18; 0" dur="0.35s" repeatCount="1"/>
+                </feOffset>
+                <feBlend in="r" in2="g" mode="screen" result="blend" />
+                <feBlend in="blend" in2="b" mode="screen" result="blend" />
+            </filter>
+        </defs>
+    </svg>
+    <script src="js/jquery.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="js/moment.js"></script>
+    <script src="js/topojson.js"></script>
+    <script src="js/world.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/typing.js"></script>
+    <script src="js/socket_client.js"></script>
+    <script>
+        $(document).ready(function () {
+            var SocketHandler = window.SocketHandler;
+            var ClientPackets = window.ClientPackets;
+            var ServerPackets = window.ServerPackets;
+            var handler = new SocketHandler("ws://127.0.0.1:8080/websocket");
+            var fakeConsole = new DisplayConsole(document.getElementById("console"));
+            handler.addHandler(ServerPackets.WORLD_UPDATE_EVENT, function (packet) {
+                console.log("Received world update?");
+                var builder = fakeConsole.builder();
+                builder.write("Received World Update Information");
+                fakeConsole.log(builder);
+                updateMap(packet);
+                handler.unsubscribeEvent("WorldUpdateEvent");
+            });
+            handler.addHandler(ServerPackets.UNIT_UPDATE_EVENT, function (packet) {
+                var builder = fakeConsole.builder();
+                builder.write(packet.country.name, packet.country.controllingTeam.toLowerCase()+ "-text");
+                builder.write(": Axis Change: ");
+                builder.write(packet.axisUnits);
+                builder.write(" Allied Change: ");
+                builder.write(packet.alliesUnits);
+                fakeConsole.log(builder);
+            });
+            handler.addHandler(ServerPackets.TRAVEL_DETECT_EVENT, function (packet) {
+                var builder = fakeConsole.builder();
+                builder.write(packet.units + " ");
+                builder.write(packet.team, packet.team.toLowerCase()+"-text");
+                builder.write(" units moved from ");
+                builder.write(packet.from.name, packet.from.controllingTeam.toLowerCase()+ "-text");
+                builder.write(" to ");
+                builder.write(packet.to.name, packet.to.controllingTeam.toLowerCase()+ "-text");
+                fakeConsole.log(builder);
+
+            });
+            handler.connect(function () {
+                var builder = fakeConsole.builder();
+                builder.write("Connected to server: ");
+                builder.write("127.0.0.1", "server-name");
+                fakeConsole.log(builder);
+                console.log("Connected");
+                handler.subscribeEvent("WorldUpdateEvent");
+                handler.subscribeEvent("UnitUpdateEvent");
+                handler.subscribeEvent("TravelDetectEvent");
+            });
+        });
+    </script>
+
+</body>
+</html>
