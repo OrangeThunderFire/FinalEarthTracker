@@ -1,0 +1,7 @@
+name: CoreFinalEarthModule
+description: FinalEarthModule
+dependencies:
+  intl: any
+  math_expressions: any
+  FinalEarthCrawler:
+    path: ../../../../../
