@@ -47,7 +47,7 @@ class CoreModule extends Module {
   Map<Country, Country> countriesToNotify = new Map<Country, Country>();
 
   CoreModule (ModuleStartPacket packet):super(packet) {
-        
+
     WebSocket.connect("ws://127.0.0.1:8080/websocket").then((WebSocket ws) {
       this.socket = ws;
 
