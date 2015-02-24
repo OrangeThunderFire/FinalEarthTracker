@@ -114,7 +114,7 @@ class Country extends FinalEarthModel {
     num rad2 = _toRad(lon2 - lon1);
     num l1 = _toRad(lat1);
     num l2 = _toRad(lat2);
-    num a = (Math.sin(rad2 / 2) * Math.sin(rad1 / 2)) + Math.sin(rad2 / 2) * Math.sin(rad2 / 2) * Math.cos(l1) * Math.cos(l2);
+    num a = (Math.sin(rad1 / 2) * Math.sin(rad1 / 2)) + Math.sin(rad2 / 2) * Math.sin(rad2 / 2) * Math.cos(l1) * Math.cos(l2);
     num c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     num distance = km * c;
     return distance;
