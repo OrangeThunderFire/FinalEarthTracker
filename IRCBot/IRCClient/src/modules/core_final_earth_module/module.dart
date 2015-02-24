@@ -26,7 +26,7 @@ UNSUBSCRIBE_FROM_EVENT,
 GET_USER_DATA
 }
 
-String theme = "${k}7";
+String theme = "${k}07";
 void main (args, ModuleStartPacket packet) {
   Language.add("Testing", "${theme}Testing this shitty IRC bot");
   Language.add("SUBSCRIBE", "${theme}Subscribed to event ${b}&1${b}");
@@ -39,7 +39,7 @@ class CoreModule extends Module {
   static  List<String> idCommands = new List<String>();
   World currentWorld;
   WebSocket socket;
-  String version = "v0.2";
+  String version = "v0.3";
   bool suppressAttackLogs = false;
   Timer postCountryUpdate;
   Dirty storage = new Dirty("quick.db");
