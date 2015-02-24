@@ -9,7 +9,7 @@ class ModuleHandler {
  
  
  void initialize () {
-   Directory thisFolder = new Directory(".\\modules\\");
+   Directory thisFolder = new Directory("./modules/");
    print("Checking folder exists");
    if (thisFolder.existsSync()) {
      List<FileSystemEntity> listSync = thisFolder.listSync(recursive: false);
@@ -46,7 +46,6 @@ class ModuleHandler {
  }
  
  void sendAllPacket(IsolatePacket packet) {
-   print("Attempting packet send");
    modules.forEach((modulename, module) {
      if (module.active) {
        module.sendMessage(packet);

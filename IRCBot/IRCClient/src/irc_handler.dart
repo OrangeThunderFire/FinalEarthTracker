@@ -153,7 +153,6 @@ class IrcHandler {
             target = new ChannelName(fullCommand[2]);
           }
           else target = new Nickname(fullCommand[2]);
-          print("PRIVATE MESSAGE!");
           moduleHandler.sendCommand(new PrivMsgCommand(target,  fullCommand.getRange(3, fullCommand.length).join(" ").substring(1)), nickname);
           break;
         case CLIENT_COMMANDS.NOTICE:
