@@ -253,7 +253,6 @@ class CoreModule extends Module {
       }
     }
     catch (E) {
-      this.SendMessage(new ChannelName("#Allies"), "Debug Caught error: ${E}");
     }
     return null;
   }
@@ -291,7 +290,35 @@ class CoreModule extends Module {
       }
     }
     if (command.get(0) == "!dis") {
-
+      String restOfCommand = command.get(1, command.getl());
+      List<String> hops = restOfCommand.split(new RegExp(" ?- ?"));
+      if (hops > 1) {
+        Country prevCountry;
+        List<String> currentHops = new List<String>();
+        Duration totalDuration = new Duration(seconds: 0);
+        while (hops.length != 0) {
+          String cName = hops.removeAt(0);
+          Country country = this.getCountry(cName.trim());
+          if (country != null) {
+            if (prevCountry != null) {
+              Duration hopDuration = prevCountry.getTravelDuration(country);
+              totalDuration = new Duration(microseconds: totalDuration.inMicroseconds + hopDuration.inMicroseconds);
+              currentHops.add("${prevCountry.countryCode} to ${country.countryCode} (${hopDuration.toString()})");
+            }
+            prevCountry = country;
+          }
+          else {
+            this.SendMessage(command.target, "$theme$b[Distance]$b I could not find the country: ${command.get(1, command.getl())}");
+            return;
+          }
+        }
+        if (currentHops.isNotEmpty) {
+          this.SendMessage(command.target, "$theme$b[Distance]$b ${currentHops.join(", ")} - Total Travel Time ${totalDuration.toString()}");
+        }
+      }
+      else {
+        this.SendMessage(command.target, "$theme$b[Distance]$b You must specify atleast 2 countries to work out the distance. Eg !dis US-GB");
+      }
     }
     if (command.get(0) == "!info") {
       Country country = this.getCountry(command.get(1, command.getl()));
