@@ -26,5 +26,16 @@ class MongoAttackLogRespository implements AttackLogRepository {
     return;
   }
 
+  Future<AttackLog> findByLogId(int id) async {
+    Db database = await MongoInstance.mongoDb;
+    DbCollection collection =database.collection("attack_logs");
+    Map atl = await collection.findOne({ "attackLog": { "logID": id } });
+    if (user != null) {
+      return new AttackLog.fromJson(atl);
+    }
+    else {
+      return;
+    }
+  }
 
 }

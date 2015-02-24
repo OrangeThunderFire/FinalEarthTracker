@@ -8,10 +8,41 @@ import "dart:convert";
 import "package:logging/logging.dart";
 import "package:mongo_dart/mongo_dart.dart";
 import 'package:FinalEarthCrawler/FinalEarthCrawler.dart';
+import 'package:FinalEarthCrawler/Models/lib/Models.dart';
 
 
 import "package:args/args.dart";
 
+var crlf = "\r\n";
+List<Socket> plainSocketClients = new List<Socket> ();
+String _formatLosses (List<UnitAmount> uae) {
+  String knownUnits = uae.map((UnitAmount uae) {
+    if (uae.total != 0) {
+      return "${uae.unit.name}^${uae.amount}^${uae.left}^${uae.unit.ID}";
+    }
+  }).join(",");
+  return knownUnits;
+}
+void sendToPlainSocketClients (String packet) {
+  plainSocketClients.forEach((Socket c) {
+    c.add(new Utf8Decoder.convert("$packet$crlf"));
+  });
+}
+String _formatUser (User u) {
+  String knownUnits = u.knownUnits.map((UnitAmount uae) {
+    if (uae.total != 0) {
+      return "${uae.unit.name}^${uae.total}^${uae.unit.ID}";
+    }
+  }).join(",");
+  return "${u.name}|${u.id}|${knownUnits}";
+}
+String _formatLog(AttackLog atl) {
+  return "${atl.logID}|${_formatUser(atl.attacker)}|${_formatUser(atl.defender)}|${atl.attackerLosses}|${atl.defenderLosses}|${_formatLosses(atl.attackerUnitData)}|${_formatLosses(atl.defenderUnitData)}";
+
+}
+void _sendLog (Socket client, AttackLog atl) {
+  client.add(new Utf8Encoder().convert("LOG ${_formatLog(atl)}$crlf"));
+}
 
 main(List<String> args) async {
   ArgParser parser = new ArgParser();
@@ -36,6 +67,7 @@ main(List<String> args) async {
   MongoAttackLogRespository attackLogRepo = new MongoAttackLogRespository();
   fec.onAttackMade.listen((AttackMadeEvent event) {
     attackLogRepo.store(event);
+    sendToPlainSocketClients(_formatLog(event.attackLog));
     wsh.clients.forEach((String key, Client client) {
       List<String> subscribedEvents = client.getMetadataOrDefault("subscribed_events", new List<String> ());
       if (subscribedEvents.contains("AttackMadeEvent")) {
@@ -100,4 +132,53 @@ main(List<String> args) async {
     });
   });
 
+  MongoUserRepository userRepo = new MongoUserRepository();
+
+  ServerSocket.bind(InternetAddress.ANY_IP_V4, 41135).then((ServerSocket socket) {
+    socket.listen((Socket client) {
+      client.add(new Utf8Encoder().convert("Final Earth Logger Interface Connected$crlf"));
+      client.transform(new Utf8Decoder()).transform(new LineSplitter()).listen((String data) {
+        print("GOT DATA $data");
+        List<String> spl = data.split(" ");
+        if (spl[0] == "GETLOG") {
+          if (spl.length > 1) {
+            int parse = int.parse(spl[1], onError: (String source) { return 1; });
+            attackLogRepo.findByLogId(parse).then((AttackLog atl) {
+              if (atl != null) {
+                _sendLog(client, atl);
+              }
+              else {
+                client.add(new Utf8Encoder().convert("LOGNOTFOUND ${spl[1]}$crlf"));
+              }
+            }).catchError((e) { });
+          }
+        }
+        if (spl[0] == "GETUSER") {
+          if (spl.length > 1) {
+            int parse = int.parse(spl[1], onError: (String source) { return -1; });
+              userRepo.getById(spl[1]).then((User u) {
+                if (u != null) {
+                  client.add(new Utf8Encoder().convert("${_formatUser(u)}$crlf"));
+                }
+                else {
+                  userRepo.getByName(spl[1]).then((User u) {
+                    if (u != null) {
+                      client.add(new Utf8Encoder().convert("${_formatUser(u)}$crlf"));
+                    }
+                    else {
+                      client.add(new Utf8Encoder().convert("USERNOTFOUND ${spl[1]}$crlf"));
+                    }
+                  });
+                }
+              });
+          }
+        }
+      }, onError: () {
+        plainSocketClients.remove(client);
+      }, onDone: () {
+        plainSocketClients.remove(client);
+      });
+
+    });
+  });
 }

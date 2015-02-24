@@ -41,7 +41,6 @@ class Request {
       }
       return reQueue();
     }).catchError((e) {
-      throw e;
         Request.log.warning("Caught error: $e");
         return reQueue();
     }, test: (error) => this._checkIfExceptionIsToBeIgnored(error));

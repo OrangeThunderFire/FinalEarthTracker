@@ -36,6 +36,20 @@ class MongoUserRepository implements UserRepository {
     return response;
   }
 
+  Future<List<User>> whereHasUnitType (UnitType type) async {
+//    Db database = await MongoInstance.mongoDb;
+//    DbCollection collection =database.collection("users");
+//    Map user = await collection.find({
+//
+//    });
+//    if (user != null) {
+//      return new User.fromJson(user);
+//    }
+//    else {
+//      return;
+//    }
+  }
+
   Future<User> getById (int id) async {
     Db database = await MongoInstance.mongoDb;
     DbCollection collection =database.collection("users");

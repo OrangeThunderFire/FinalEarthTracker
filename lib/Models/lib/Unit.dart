@@ -118,6 +118,9 @@ class Unit extends FinalEarthModel {
     return;
   }
 
+  static List<Unit> getByType (UnitType type) {
+    return _UNITS_ID_INDEX.values.where((Unit elem) { return elem.type == type; }).toList();
+  }
   static Unit getByName (String name) {
     Unit.init();
     if (_UNITS_NAME_INDEX.containsKey(name)) {

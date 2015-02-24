@@ -57,7 +57,7 @@ part "WebSocket/ServerPackets/UserDataResponse.dart";
 part "WebSocket/ServerPackets/UserNotFoundPacket.dart";
 
 class FinalEarthCrawler {
-  Requester _requester = new Requester(interval: 3000);
+  Requester _requester = new Requester(interval: 2000);
 
   WorldUpdateDispatcher _worldUpdateDispatcher;
   CountryChangeDispatcher _countryChangeDispatcher;

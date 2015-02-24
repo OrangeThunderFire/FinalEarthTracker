@@ -23,6 +23,7 @@ class User extends FinalEarthModel {
     this.attackLogIds = json["attackLogIds"];
   }
 
+
   Map toMap() {
     Map fields = this.fields;
     fields["team"] = convertTeamToString(this.team);
