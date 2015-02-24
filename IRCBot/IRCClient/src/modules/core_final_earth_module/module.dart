@@ -6,6 +6,7 @@ import 'dart:io';
 import "dart:convert";
 import "package:intl/intl.dart";
 import 'package:math_expressions/math_expressions.dart';
+import 'package:dirty/dirty.dart';
 import "../../../../../lib/Models/lib/Models.dart";
 
 enum SERVER_PACKETS {
@@ -33,6 +34,7 @@ void main (args, ModuleStartPacket packet) {
   CoreModule cm = new CoreModule(packet);
 }
 
+
 class CoreModule extends Module {
   static  List<String> idCommands = new List<String>();
   World currentWorld;
@@ -40,9 +42,12 @@ class CoreModule extends Module {
   String version = "v0.2";
   bool suppressAttackLogs = false;
   Timer postCountryUpdate;
+  Dirty storage = new Dirty("quick.db");
+
   Map<Country, Country> countriesToNotify = new Map<Country, Country>();
 
   CoreModule (ModuleStartPacket packet):super(packet) {
+        
     WebSocket.connect("ws://127.0.0.1:8080/websocket").then((WebSocket ws) {
       this.socket = ws;
 
