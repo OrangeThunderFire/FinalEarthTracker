@@ -96,6 +96,30 @@ class Country extends FinalEarthModel {
     return this.fields[key];
   }
 
+  Duration getTravelDuration (Country countryTwo) {
+    return new Duration(seconds: (getDistance(countryTwo) / 0.441792));
+  }
+
+  num _toRad (num degrees) {
+    return degrees * (Math.PI / 180);
+  }
+
+  num getDistance (Country countryTwo) {
+    num lon1 = this.location.longitude;
+    num lat1 = this.location.latitude;
+    num lon2 = countryTwo.location.longitude;
+    num lat2 = countryTwo.location.latitude;
+    int km = 6371;
+    num rad1 = _toRad(lat2 - lat1);
+    num rad2 = _toRad(lon2 - lon1);
+    num l1 = _toRad(lat1);
+    num l2 = _toRad(lat2);
+    num a = (Math.sin(rad2 / 2) * Math.sin(rad1 / 2)) + Math.sin(rad2 / 2) * Math.sin(rad2 / 2) * Math.cos(l1) * Math.cos(l2);
+    num c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    num distance = km * c;
+    return distance;
+  }
+
   Map toMap () {
     Map fields = this.fields;
     fields["location"] = this.location.toMap();

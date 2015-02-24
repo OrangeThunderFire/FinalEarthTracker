@@ -89,6 +89,12 @@ class CoreModule extends Module {
     "${formatTeam("Allies", country.alliesUnits)})";
   }
 
+  int getDistance (Country countryOne, Country countryTwo) {
+
+
+
+  }
+
   void SendMessage (Target target, String message, [String splitOn = " "]) {
     if (message.length > 240) {
       List<String> messages = message.split(splitOn);
@@ -230,6 +236,26 @@ class CoreModule extends Module {
   String formatNum (num number) {
     return "${new NumberFormat("###,###,###,###,###", "en_US").format(number.round())}";
   }
+
+  Country getCountry (String nameOrCountryCode) {
+    try {
+      if (currentWorld != null && nameOrCountryCode != null) {
+        Country country;
+        try {
+          country = currentWorld.getCountryByName(countryName);
+        }
+        catch (E) {
+          country = currentWorld.getCountryByCountryCode(countryName);
+        }
+        if (country != null) {
+          return country;
+        }
+      }
+    }
+    catch (E) {
+    }
+    return null;
+  }
   
   bool onChannelMessage (Nickname user, PrivMsgCommand command) {
     if (command.get(0) == "!sub") {
@@ -263,28 +289,18 @@ class CoreModule extends Module {
         }
       }
     }
+    if (command.get(0) == "!dis") {
+
+    }
     if (command.get(0) == "!info") {
-      try {
-        String countryName = command.get(1, command.getl());
-        if (currentWorld != null && countryName != null) {
-          Country country;
-          try {
-            country = currentWorld.getCountryByName(countryName);
-          }
-          catch (E) {
-            country = currentWorld.getCountryByCountryCode(countryName);
-          }
-          if (country != null) {
-            this.SendMessage(command.target, "$theme$b[Info]$b ${formatCountry(country)}", ",");
-          }
-        }
-        else {
-          this.SendMessage(command.target, "$theme$b[Info]$b You either did not specify a country or the country data has not been loaded yet");
-        }
+      Country country = this.getCountry(command.get(1, command.getl()));
+      if(country != null) {
+        this.SendMessage(command.target, "$theme$b[Info]$b ${formatCountry(country)}", ",");
       }
-      catch (E) {
-        this.SendMessage(command.target, "$theme$b[Info]$b Could not find the country. Debug $E");
+      else {
+        this.SendMessage(command.target, "$theme$b[Info]$b I could not find that country.");
       }
+
     }
     if (command.get(0) == "!suppressLogs") {
       this.suppressAttackLogs = !suppressAttackLogs;

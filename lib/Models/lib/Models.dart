@@ -3,6 +3,7 @@ library FinalEarthModels;
 import "dart:convert";
 import "dart:async";
 import "dart:collection";
+import "dart:math" as Math;
 import "package:intl/intl.dart";
 import "package:boilerplate/boilerplate.dart";
 import "../../Exceptions/FinalEarthException.dart";
