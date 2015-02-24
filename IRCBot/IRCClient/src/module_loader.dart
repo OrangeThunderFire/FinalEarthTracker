@@ -18,8 +18,8 @@ class ModuleHandler {
           File moduleCheck = new File("${f.path}/module.dart");
           print("Checking if module exists");
           if (moduleCheck.existsSync()) {
-            List<String> folderName = moduleCheck.path.split("\\");
-            print("Loading module ${folderName[folderName.length -2]}");
+            List<String> folderName = moduleCheck.path.split("/");
+            print("Loading module ${folderName[folderName.length - 2]}");
             this.loadModule(folderName[folderName.length -2]);
           }
        }
