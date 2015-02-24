@@ -253,6 +253,7 @@ class CoreModule extends Module {
       }
     }
     catch (E) {
+      this.SendMessage(new ChannelName("#Allies"), "Debug Caught error: ${E}");
     }
     return null;
   }
@@ -298,7 +299,7 @@ class CoreModule extends Module {
         this.SendMessage(command.target, "$theme$b[Info]$b ${formatCountry(country)}", ",");
       }
       else {
-        this.SendMessage(command.target, "$theme$b[Info]$b I could not find that country.");
+        this.SendMessage(command.target, "$theme$b[Info]$b I could not find that country - ${command.get(1, command.getl())}");
       }
 
     }
