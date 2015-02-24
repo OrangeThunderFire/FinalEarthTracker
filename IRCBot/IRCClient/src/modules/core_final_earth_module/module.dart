@@ -37,6 +37,7 @@ class CoreModule extends Module {
   static  List<String> idCommands = new List<String>();
   World currentWorld;
   WebSocket socket;
+  String version = "v0.1";
   bool suppressAttackLogs = false;
   Timer postCountryUpdate;
   Map<Country, Country> countriesToNotify = new Map<Country, Country>();
@@ -310,6 +311,9 @@ class CoreModule extends Module {
           this.SendMessage(command.target, "$theme$b[Results] ${unitsStr.getRange(i, (i+7 > unitsStr.length ? unitsStr.length : i+7)).join(", ")}", ",");
         }
       }
+    }
+    if (command.get(0) == "!module") {
+      this.SendMessage(command.target,"Module VERSION $version");
     }
     if (command.get(0) == "!totals") {
       if (currentWorld != null) {

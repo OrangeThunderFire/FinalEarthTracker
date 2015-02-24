@@ -3,5 +3,6 @@ description: FinalEarthModule
 dependencies:
   intl: any
   math_expressions: any
+  dirty: any
   FinalEarthCrawler:
     path: ../../../../../
