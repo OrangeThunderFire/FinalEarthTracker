@@ -96,8 +96,8 @@ class Country extends FinalEarthModel {
     return this.fields[key];
   }
 
-  Duration getTravelDuration (Country countryTwo) {
-    return new Duration(seconds: (getDistance(countryTwo) / 0.441792));
+  Duration getTravelDuration (Country countryTwo, [int percent = 0]) {
+    return new Duration(seconds: ((getDistance(countryTwo) / 0.441792) * ((100 - percent) / 100)).round());
   }
 
   num _toRad (num degrees) {

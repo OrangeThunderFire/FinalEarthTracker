@@ -290,7 +290,16 @@ class CoreModule extends Module {
       }
     }
     if (command.get(0) == "!dis") {
-      String restOfCommand = command.get(1, command.getl());
+      RegExp percentReg = new RegExp(r"[0-9]+?%");
+      int percent = 0;
+      int from = 1;
+      if (percentReg.hasMatch(command.get(1))) {
+        percent = int.parse(command.get(1).replaceAll("%",""), onError: (String src) {
+          return 0;
+        });
+        from = 2;
+      }
+      String restOfCommand = command.get(from, command.getl());
       List<String> hops = restOfCommand.split(new RegExp(" ?- ?"));
       if (hops.length > 1) {
         Country prevCountry;
@@ -301,7 +310,7 @@ class CoreModule extends Module {
           Country country = this.getCountry(cName.trim());
           if (country != null) {
             if (prevCountry != null) {
-              Duration hopDuration = prevCountry.getTravelDuration(country);
+              Duration hopDuration = prevCountry.getTravelDuration(country, percent);
               totalDuration = new Duration(microseconds: totalDuration.inMicroseconds + hopDuration.inMicroseconds);
               currentHops.add("${prevCountry.countryCode} to ${country.countryCode} (${formatNum(prevCountry.getDistance(country))}km) (${hopDuration.toString()})");
             }
@@ -313,7 +322,7 @@ class CoreModule extends Module {
           }
         }
         if (currentHops.isNotEmpty) {
-          this.SendMessage(command.target, "$theme$b[Distance]$b ${currentHops.join(", ")} - Total Travel Time ${totalDuration.toString()}");
+          this.SendMessage(command.target, "$theme$b[Distance]$b ${currentHops.join(", ")} - Total Travel Time${percent != 0 ? " with bonus $percent%:": ":"}${totalDuration.toString()}");
         }
       }
       else {
