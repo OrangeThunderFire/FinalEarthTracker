@@ -303,7 +303,7 @@ class CoreModule extends Module {
             if (prevCountry != null) {
               Duration hopDuration = prevCountry.getTravelDuration(country);
               totalDuration = new Duration(microseconds: totalDuration.inMicroseconds + hopDuration.inMicroseconds);
-              currentHops.add("${prevCountry.countryCode} to ${country.countryCode} (${hopDuration.toString()})");
+              currentHops.add("${prevCountry.countryCode} to ${country.countryCode} (${formatNum(prevCountry.getDistance(country))}km) (${hopDuration.toString()})");
             }
             prevCountry = country;
           }
