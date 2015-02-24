@@ -1,4 +1,4 @@
-import '../../module/main.dart';
+import '../module/main.dart';
 
 void main (args, ModuleStartPacket packet) { 
   ConnectionModule cm = new ConnectionModule(packet);

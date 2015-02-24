@@ -89,9 +89,9 @@ class ModuleContainer {
   
   void initialize () {
     print("INIT MODULE $moduleFolder");
-    File f = new File(".\\modules\\$moduleFolder\\module.dart");
+    File f = new File("./modules/$moduleFolder/module.dart");
     if (f.existsSync()) {
-      File _moduleDescription = new File(".\\modules\\$moduleFolder\\module.json");
+      File _moduleDescription = new File("./modules/$moduleFolder/module.json");
       if (_moduleDescription.existsSync()) {
         try {
           dynamic obj = new JsonDecoder(null).convert(_moduleDescription.readAsStringSync());
