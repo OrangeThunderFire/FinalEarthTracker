@@ -1,0 +1,7 @@
+{ 
+ "name": "Manager",
+ "description": "Contains commands relating to management of the bot",
+ "version": 1,
+ "author": "Plornt",
+ "image": "none"
+}

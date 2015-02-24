@@ -1,0 +1,7 @@
+{ 
+ "name": "Admin Module",
+ "description": "Connects to a client via direct connection to give administrator commands",
+ "version": 1,
+ "author": "Plornt",
+ "image": "none"
+}

@@ -1,0 +1,7 @@
+{ 
+ "name": "Connection module",
+ "description": "Handles connection messages non specific to the server",
+ "version": 1,
+ "author": "Plornt",
+ "image": "none"
+}

@@ -1,0 +1,12 @@
+name: IRCBot
+description: A sample command-line application
+dependencies:
+  crypto: any
+  html5lib: any
+  sqljocky: any
+  intl: any
+  math_expressions: any
+  boilerplate: any
+  args: any
+  FinalEarthCrawler:
+    path: ..\..\
