@@ -15,7 +15,7 @@ class ModuleHandler {
      List<FileSystemEntity> listSync = thisFolder.listSync(recursive: false);
      listSync.forEach((FileSystemEntity f) { 
        if (f is Directory) {
-          File moduleCheck = new File("${f.path}\\module.dart");
+          File moduleCheck = new File("${f.path}/module.dart");
           print("Checking if module exists");
           if (moduleCheck.existsSync()) {
             List<String> folderName = moduleCheck.path.split("\\");
