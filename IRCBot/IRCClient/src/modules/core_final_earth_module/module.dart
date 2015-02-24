@@ -242,10 +242,10 @@ class CoreModule extends Module {
       if (currentWorld != null && nameOrCountryCode != null) {
         Country country;
         try {
-          country = currentWorld.getCountryByName(countryName);
+          country = currentWorld.getCountryByName(nameOrCountryCode);
         }
         catch (E) {
-          country = currentWorld.getCountryByCountryCode(countryName);
+          country = currentWorld.getCountryByCountryCode(nameOrCountryCode);
         }
         if (country != null) {
           return country;
