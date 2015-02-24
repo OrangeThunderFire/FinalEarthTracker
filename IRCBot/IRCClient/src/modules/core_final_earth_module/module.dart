@@ -37,7 +37,7 @@ class CoreModule extends Module {
   static  List<String> idCommands = new List<String>();
   World currentWorld;
   WebSocket socket;
-  String version = "v0.1";
+  String version = "v0.2";
   bool suppressAttackLogs = false;
   Timer postCountryUpdate;
   Map<Country, Country> countriesToNotify = new Map<Country, Country>();
