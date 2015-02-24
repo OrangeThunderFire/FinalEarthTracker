@@ -292,7 +292,7 @@ class CoreModule extends Module {
     if (command.get(0) == "!dis") {
       String restOfCommand = command.get(1, command.getl());
       List<String> hops = restOfCommand.split(new RegExp(" ?- ?"));
-      if (hops > 1) {
+      if (hops.length > 1) {
         Country prevCountry;
         List<String> currentHops = new List<String>();
         Duration totalDuration = new Duration(seconds: 0);
