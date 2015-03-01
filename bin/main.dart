@@ -37,11 +37,23 @@ String _formatUser (User u) {
   return "${u.name}|${u.id}|${knownUnits}";
 }
 String _formatLog(AttackLog atl) {
+  if (!atl.isNukeLog) {
   return "${atl.logID}|${_formatUser(atl.attacker)}|${_formatUser(atl.defender)}|${atl.attackerLosses}|${atl.defenderLosses}|${_formatLosses(atl.attackerUnitData)}|${_formatLosses(atl.defenderUnitData)}";
-
+  }
+  else {
+    return "${atl.logID}|${_formatUser(atl.defender)}|${atl.defenderLosses}|${_formatLosses(atl.defenderUnitData)}";
+  }
+}
+String _formatLogPacket (AttackLog atl) {
+  if (atl.isNukeLog == false) {
+    return "LOG ${_formatLog(atl)}$crlf";
+  }
+  else {
+    return "NUKELOG ${_formatLog(atl)}";
+  }
 }
 void _sendLog (Socket client, AttackLog atl) {
-  client.add(new Utf8Encoder().convert("LOG ${_formatLog(atl)}$crlf"));
+  client.add(new Utf8Encoder().convert(_formatLogPacket(atl)));
 }
 
 main(List<String> args) async {
@@ -67,7 +79,7 @@ main(List<String> args) async {
   MongoAttackLogRespository attackLogRepo = new MongoAttackLogRespository();
   fec.onAttackMade.listen((AttackMadeEvent event) {
     attackLogRepo.store(event);
-    sendToPlainSocketClients(_formatLog(event.attackLog));
+    sendToPlainSocketClients(_formatLogPacket(event.attackLog));
     wsh.clients.forEach((String key, Client client) {
       List<String> subscribedEvents = client.getMetadataOrDefault("subscribed_events", new List<String> ());
       if (subscribedEvents.contains("AttackMadeEvent")) {

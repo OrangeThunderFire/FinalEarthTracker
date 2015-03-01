@@ -14,41 +14,68 @@ class AttackMadeDispatcher extends FinalEarthDispatcher {
       if (!response.contains("Not Found")) {
         Document doc = parse(response);
         Element resultOutput = doc.querySelector('.w90p.alleft');
-        List<Element> userLinks = resultOutput.querySelectorAll("a");
-        String attackerName = userLinks[0].text.trim();
-        int attackerID = userLinks[0].attributes["href"].replaceFirst("details?userID=", "");
-        String defenderName = userLinks[1].text.trim();
-        int defenderID = userLinks[1].attributes["href"].replaceFirst("details?userID=", "");
-        TEAM attackerTeam = userLinks[0].querySelector("font").attributes["color"] == "#00D8A3" ? TEAM.ALLIES : TEAM.AXIS;
-        TEAM defenderTeam = userLinks[1].querySelector("font").attributes["color"] == "#00D8A3" ? TEAM.ALLIES : TEAM.AXIS;
 
-        List<Element> logTable = doc.querySelectorAll(".scroll_bar table");
-        List<Element> attackerTableRows = logTable[0].querySelectorAll("tr");
-        List<Element> defenderTableRows = logTable[1].querySelectorAll("tr");
-        Map attackerData = parseTable(attackerTableRows);
-        Map defenderData = parseTable(defenderTableRows);
         String output = resultOutput.innerHtml;
         RegExp timeReg = new RegExp(r'([0-9]+\-[0-9]+\-[0-9]+ \- [0-9]+\:[0-9]+\:[0-9]+ (?:AM|PM))');
         Match timeR = timeReg.firstMatch(output);
         DateTime time = new DateFormat("y-M-d - h:m:s a").parse(timeR.group(1));
-        User attacker = await AttackMadeDispatcher.userRepo.getById(attackerID);
-        if (attacker == null) {
-          attacker = new User(attackerID, attackerName, attackerTeam, [], 0, 0, []);
+        List<Element> userLinks = resultOutput.querySelectorAll("a");
+        if (userLinks.length == 1) {
+          // Nuke Log
+
+          String nukedUserName = userLinks[0].text.trim();
+          int nukedUserId = userLinks[0].attributes["href"].replaceFirst("details?userID=", "");
+          TEAM nukedUserTeam = userLinks[0].querySelector("font").attributes["color"] == "#00D8A3" ? TEAM.ALLIES : TEAM.AXIS;
+          List<Element> logTable = doc.querySelectorAll(".scroll_bar table");
+          List<Element> nukedUserTableRows = logTable[0].querySelectorAll("tr");
+          Map nukedUserData = parseTable(nukedUserTableRows);
+          RegExp damageReg = new RegExp(r'Damaged ([0-9]+?)% of the land.');
+          int damage = int.parse(damageReg.firstMatch(output).group(1), onError: (String src) {
+            return 0;
+          });
+          User nukedUser = await AttackMadeDispatcher.userRepo.getById(nukedUserId);
+          if (nukedUser == null) {
+            nukedUser = new User(nukedUserId, nukedUserName, nukedUserTeam, [], 0, 0, []);
+          }
+          _updateUser(nukedUser, nukedUserName, nukedUserTeam, nukedUserData, null, logID);
+          userRepo.store(nukedUser);
+
+          AttackLog atl = new AttackLog(logID, time, null, nukedUser,
+          null, nukedUserData["units"], 0, nukedUserData["totalLost"], true, damage);
+          AttackMadeEvent ame = new AttackMadeEvent(atl);
+          this._eventStream.add(ame);
         }
-        print(attacker.toMap());
-        User defender = await AttackMadeDispatcher.userRepo.getById(defenderID);
-        if (defender == null) {
-          defender = new User(defenderID, defenderName, defenderTeam, [], 0, 0, []);
+        else {
+          String attackerName = userLinks[0].text.trim();
+          int attackerID = userLinks[0].attributes["href"].replaceFirst("details?userID=", "");
+          String defenderName = userLinks[1].text.trim();
+          int defenderID = userLinks[1].attributes["href"].replaceFirst("details?userID=", "");
+          TEAM attackerTeam = userLinks[0].querySelector("font").attributes["color"] == "#00D8A3" ? TEAM.ALLIES : TEAM.AXIS;
+          TEAM defenderTeam = userLinks[1].querySelector("font").attributes["color"] == "#00D8A3" ? TEAM.ALLIES : TEAM.AXIS;
+
+          List<Element> logTable = doc.querySelectorAll(".scroll_bar table");
+          List<Element> attackerTableRows = logTable[0].querySelectorAll("tr");
+          List<Element> defenderTableRows = logTable[1].querySelectorAll("tr");
+          Map attackerData = parseTable(attackerTableRows);
+          Map defenderData = parseTable(defenderTableRows);
+          User attacker = await AttackMadeDispatcher.userRepo.getById(attackerID);
+          if (attacker == null) {
+            attacker = new User(attackerID, attackerName, attackerTeam, [], 0, 0, []);
+          }
+
+          User defender = await AttackMadeDispatcher.userRepo.getById(defenderID);
+          if (defender == null) {
+            defender = new User(defenderID, defenderName, defenderTeam, [], 0, 0, []);
+          }
+          _updateUser(attacker, attackerName, attackerTeam, attackerData, defenderData, logID);
+          _updateUser(defender, defenderName, defenderTeam, defenderData, attackerData, logID);
+          userRepo.store(attacker);
+          userRepo.store(defender);
+          AttackLog atl = new AttackLog(logID, time, attacker, defender,
+          attackerData["units"], defenderData["units"], attackerData["totalLost"], defenderData["totalLost"]);
+          AttackMadeEvent ame = new AttackMadeEvent(atl);
+          this._eventStream.add(ame);
         }
-        print(defender.toMap());
-        _updateUser(attacker, attackerName, attackerTeam, attackerData, defenderData, logID);
-        _updateUser(defender, defenderName, defenderTeam, defenderData, attackerData, logID);
-        userRepo.store(attacker);
-        userRepo.store(defender);
-        AttackLog atl = new AttackLog(logID, time, attacker, defender,
-        attackerData["units"], defenderData["units"], attackerData["totalLost"], defenderData["totalLost"]);
-        AttackMadeEvent ame = new AttackMadeEvent(atl);
-        this._eventStream.add(ame);
         AttackMadeDispatcher.logID++;
 
       }
@@ -79,7 +106,9 @@ class AttackMadeDispatcher extends FinalEarthDispatcher {
     });
 
     user.losses += logData["totalLost"];
-    user.dealt += otherUsersLogData["totalLost"];
+    if (otherUsersLogData != null) {
+      user.dealt += otherUsersLogData["totalLost"];
+    }
     user.attackLogIds.add(logId);
   }
 

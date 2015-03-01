@@ -228,11 +228,15 @@ class CoreModule extends Module {
     return "${formatTeam(convertTeamToString(user.team),user.name)} (F:${gMValue(typeAmounts,UnitType.SOLDIER)}|J:${gMValue(typeAmounts,UnitType.JEEP)}|T:${gMValue(typeAmounts,UnitType.TANK)}|C:${gMValue(typeAmounts,UnitType.CHOPPER)}|A:${gMValue(typeAmounts,UnitType.AIR_CRAFT)}|N:${gMValue(typeAmounts,UnitType.NAVAL)})";
   }
   String formatAttackLog(AttackLog log) {
+    if (log.isNukeLog) {
+      return "$theme$b[Nuke][${new DateFormat("hh:mm:ss d/M").format(log.time)}]$b Nuke detonated destroying $b${log.destroyPercent}$b of ${formatUser(log.defender)} units - ${u}http://finalearth.com/game#details/logUser?ID=${log.logID}";
+    }
+    else {
+      return "$theme$b[Attack][${new DateFormat("hh:mm:ss d/M").format(log.time)}]$b ${formatUser(log.attacker)}"
+      "(-\$${formatNum(log.attackerLosses)}) vs ${formatUser(log.defender)} (-\$${formatNum(log.defenderLosses)}) - ${u}http://finalearth.com/game#details/logUser?ID=${log.logID}";
 
-    return "$theme$b[Attack][${new DateFormat("hh:mm:ss d/M").format(log.time)}]$b ${formatUser(log.attacker)}"
-    "(-\$${formatNum(log.attackerLosses)}) vs ${formatUser(log.defender)} (-\$${formatNum(log.defenderLosses)}) - ${u}http://finalearth.com/game#details/logUser?ID=${log.logID}";
+    }
   }
-
   String formatNum (num number) {
     return "${new NumberFormat("###,###,###,###,###", "en_US").format(number.round())}";
   }
@@ -322,7 +326,7 @@ class CoreModule extends Module {
           }
         }
         if (currentHops.isNotEmpty) {
-          this.SendMessage(command.target, "$theme$b[Distance]$b ${currentHops.join(", ")} - Total Travel Time${percent != 0 ? " with bonus $percent%:": ":"}${totalDuration.toString()}");
+          this.SendMessage(command.target, "$theme$b[Distance]$b ${currentHops.join(", ")} - Total Travel Time${percent != 0 ? " with bonus $percent%:": ":"} ${totalDuration.toString()}");
         }
       }
       else {
