@@ -229,7 +229,7 @@ class CoreModule extends Module {
   }
   String formatAttackLog(AttackLog log) {
     if (log.isNukeLog) {
-      return "$theme$b[Nuke][${new DateFormat("hh:mm:ss d/M").format(log.time)}]$b Nuke detonated destroying $b${log.destroyPercent}$b of ${formatUser(log.defender)} units - ${u}http://finalearth.com/game#details/logUser?ID=${log.logID}";
+      return "$theme$b[Nuke][${new DateFormat("hh:mm:ss d/M").format(log.time)}]$b Nuke detonated destroying $b${log.destroyAmount}%$b of ${formatUser(log.defender)} units - ${u}http://finalearth.com/game#details/logUser?ID=${log.logID}";
     }
     else {
       return "$theme$b[Attack][${new DateFormat("hh:mm:ss d/M").format(log.time)}]$b ${formatUser(log.attacker)}"
