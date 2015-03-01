@@ -75,19 +75,19 @@ main(List<String> args) async {
 //
   FinalEarthCrawler fec = new FinalEarthCrawler(results["username"], results["password"]);
 
-  AttackMadeDispatcher.logID = int.parse(results["logid"], onError: (String src) { return 1; });
-  MongoAttackLogRespository attackLogRepo = new MongoAttackLogRespository();
-  fec.onAttackMade.listen((AttackMadeEvent event) {
-    attackLogRepo.store(event);
-    sendToPlainSocketClients(_formatLogPacket(event.attackLog));
-    wsh.clients.forEach((String key, Client client) {
-      List<String> subscribedEvents = client.getMetadataOrDefault("subscribed_events", new List<String> ());
-      if (subscribedEvents.contains("AttackMadeEvent")) {
-        Logger.root.info("Sending AttackMadeEvent");
-        client.sendPacket(new AttackMadePacket(event));
-      }
-    });
-  });
+//  AttackMadeDispatcher.logID = int.parse(results["logid"], onError: (String src) { return 1; });
+//  MongoAttackLogRespository attackLogRepo = new MongoAttackLogRespository();
+//  fec.onAttackMade.listen((AttackMadeEvent event) {
+//    attackLogRepo.store(event);
+//    sendToPlainSocketClients(_formatLogPacket(event.attackLog));
+//    wsh.clients.forEach((String key, Client client) {
+//      List<String> subscribedEvents = client.getMetadataOrDefault("subscribed_events", new List<String> ());
+//      if (subscribedEvents.contains("AttackMadeEvent")) {
+//        Logger.root.info("Sending AttackMadeEvent");
+//        client.sendPacket(new AttackMadePacket(event));
+//      }
+//    });
+//  });
 
   MongoWorldRepository worldRepo = new MongoWorldRepository();
   fec.onWorldUpdate.listen((WorldUpdateEvent event) {
