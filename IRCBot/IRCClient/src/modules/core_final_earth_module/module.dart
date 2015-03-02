@@ -444,7 +444,7 @@ class CoreModule extends Module {
         Country c = currentWorld.getCountryByName(countryName);
         if (c != null) {
           String countries =currentWorld.countries.where((Country e) {
-            return e.getTravelDuration(c).inMinutes <= dur && e != c;
+            return e.getTravelDuration(c, percent).inMinutes <= dur && e != c;
           }).map((Country e) {
             return formatCountry(e);
           }).join(", ");
