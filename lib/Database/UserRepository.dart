@@ -68,7 +68,7 @@ class MongoUserRepository implements UserRepository {
     try {
       user = await collection.findOne({
           "name": {
-              "\$regex": new BsonRegexp(name)
+              "\$regex": new BsonRegexp(name, caseInsensitive: true)
           }
       });
     }
