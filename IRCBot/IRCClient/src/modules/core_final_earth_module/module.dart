@@ -429,7 +429,14 @@ class CoreModule extends Module {
       try {
         String regionName = command.get(1, command.getl());
         if (currentWorld != null && regionName != null) {
-          List<Country> countries = currentWorld.getCountriesByRegion(regionName);
+          List<Country> countries = new List<Country>();
+          if (regionName.toUpperCase() == "AMERICAS") {
+            countries.addAll(currentWorld.getCountriesByRegion("North America"));
+            countries.addAll(currentWorld.getCountriesByRegion("South America"));
+          }
+          else {
+            countries.addAll(currentWorld.getCountriesByRegion(regionName));
+          }
           if (countries != null) {
             String regionStr = countries.map((Country e) { return formatCountry(e); }).join(", ");
             this.SendMessage(command.target, "$theme$b[Region]$b $regionStr",",");
