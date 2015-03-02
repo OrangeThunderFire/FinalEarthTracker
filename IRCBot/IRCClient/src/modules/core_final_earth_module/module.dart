@@ -425,6 +425,37 @@ class CoreModule extends Module {
         });
       }
     }
+    if (command.get(0) == "!proximity") {
+      RegExp percentReg = new RegExp(r"[0-9]+?%");
+      int percent = 0;
+      int from = 1;
+      if (percentReg.hasMatch(command.get(1))) {
+        percent = int.parse(command.get(1).replaceAll("%",""), onError: (String src) {
+          return 0;
+        });
+        from = 2;
+      }
+      String duration = command.get(from);
+      int dur = int.parse(duration, onError: (String d) {
+        return 0;
+      });
+      String countryName = command.get(from+1, command.getl());
+      if (currentWorld != null) {
+        Country c = currentWorld.getCountryByName(countryName);
+        if (c != null) {
+          String countries =currentWorld.countries.where((Country e) {
+            return e.getTravelDuration(c).inMinutes <= dur && e != c;
+          }).map((Country e) {
+            return formatCountry(e);
+          }).join(", ");
+          this.SendMessage(command.target, "$theme$b[Proximity]$b Countries within $b$dur$b minutes of $b${formatCountry(c)}:");
+          this.SendMessage(command.target, "$theme$b[Proximity]$b $countries");
+        }
+        else {
+          this.SendMessage(command.target, "$theme$b[Proximity]$b Could not find the country: $countryName. Please make sure you are using the syntax: $b!proximity $u[travelModifier%]$u $u<Duration in Minutes>$u $u<Country Name>$u");
+        }
+      }
+    }
     if (command.get(0) == "!region") {
       try {
         String regionName = command.get(1, command.getl());
