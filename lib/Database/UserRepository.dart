@@ -64,7 +64,17 @@ class MongoUserRepository implements UserRepository {
   Future<User> getByName (String name) async {
     Db database = await MongoInstance.mongoDb;
     DbCollection collection =database.collection("users");
-    Map user = await collection.findOne({ "name": name });
+    Map user;
+    try {
+      user = await collection.findOne({
+          "name": {
+              "\$regex": new BsonRegexp(name)
+          }
+      });
+    }
+    catch (E) {
+
+    }
     if (user == null) {
       return;
     }
