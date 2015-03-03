@@ -11,7 +11,7 @@ class AttackMadeDispatcher extends FinalEarthDispatcher {
   _checkForEvents () async {
     if (!_isCancelled && logID !=0) {
       String response = await this.crawler.getLogData(logID);
-      if (response.contains("Create one")) {
+      if (response.contains("/users/login")) {
         await this.crawler.login();
         _checkForEvents();
       }
