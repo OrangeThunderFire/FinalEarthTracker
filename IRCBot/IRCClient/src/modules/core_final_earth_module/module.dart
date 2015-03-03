@@ -336,7 +336,7 @@ class CoreModule extends Module {
     }
     if (command.get(0) == "!topfactories" && currentWorld != null) {
       List<Country> factoryListSort = new List.from(this.currentWorld.countries)..sort((Country a, Country b) {
-        return a.factories < b.factories;
+        return a.factories - b.factories;
       });
       String message = factoryListSort.getRange(0, 10).map((Country c) {
         return "${this.formatCountry(c)} (${formatNum(c.factories)} facs)";
