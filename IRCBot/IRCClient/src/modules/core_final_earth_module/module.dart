@@ -196,11 +196,11 @@ class CoreModule extends Module {
     .map((Map element) { return "(+${element["percent"]}%) ${formatCountry(element["country"])}"; })
     .join(", ");
 
-    this.SendMessage(new ChannelName("#Allies"), "$theme$b[Hour Update]$b The ${formatTeam("Axis")} gained control in ${axisGainedMessage}",",");
-    this.SendMessage(new ChannelName("#Allies"), "$theme$b[Hour Update]$b The ${formatTeam("Axis")} lost control to local malitia in ${axisNeutralMessage}", ",");
-
-    this.SendMessage(new ChannelName("#Allies"), "$theme$b[Hour Update]$b The ${formatTeam("Allies")} gained control in ${alliedGainedMessage}",",");
-    this.SendMessage(new ChannelName("#Allies"), "$theme$b[Hour Update]$b The ${formatTeam("Allies")} lost control to local malitia in ${alliedNeutralMessage}",",");
+//    this.SendMessage(new ChannelName("#Allies"), "$theme$b[Hour Update]$b The ${formatTeam("Axis")} gained control in ${axisGainedMessage}",",");
+//    this.SendMessage(new ChannelName("#Allies"), "$theme$b[Hour Update]$b The ${formatTeam("Axis")} lost control to local malitia in ${axisNeutralMessage}", ",");
+//
+//    this.SendMessage(new ChannelName("#Allies"), "$theme$b[Hour Update]$b The ${formatTeam("Allies")} gained control in ${alliedGainedMessage}",",");
+//    this.SendMessage(new ChannelName("#Allies"), "$theme$b[Hour Update]$b The ${formatTeam("Allies")} lost control to local malitia in ${alliedNeutralMessage}",",");
 
   }
   String outputUser (ChannelName chName, User user) {
