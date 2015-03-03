@@ -334,6 +334,15 @@ class CoreModule extends Module {
         this.SendMessage(command.target, "$theme$b[Distance]$b You must specify atleast 2 countries to work out the distance. Eg !dis US-GB");
       }
     }
+    if (command.get(0) == "!topfactories" && currentWorld != null) {
+      List<Country> factoryListSort = new List<Country>.from(this.currentWorld.countries)..sort((Country a, Country b) {
+        return a.factories < b.factories;
+      });
+      String message = factoryListSort.getRange(0, 10).map((Country c) {
+        return "${this.formatCountry(c)} (${formatNum(c.factories)} facs)";
+      }).join(", ");
+      this.SendMessage(command.target, "$theme$b[Top Factories]$b $message", ",");
+    }
     if (command.get(0) == "!info") {
       Country country = this.getCountry(command.get(1, command.getl()));
       if(country != null) {
