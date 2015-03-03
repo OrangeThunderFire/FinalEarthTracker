@@ -343,6 +343,25 @@ class CoreModule extends Module {
       }).join(", ");
       this.SendMessage(command.target, "$theme$b[Top Factories]$b $message", ",");
     }
+
+    if (command.get(0) == "!toprigs" && currentWorld != null) {
+      List<Country> listSort = new List.from(this.currentWorld.countries)..sort((Country a, Country b) {
+        return b.oilRigs - a.oilRigs;
+      });
+      String message = listSort.getRange(0, 10).map((Country c) {
+        return "${this.formatCountry(c)} (${formatNum(c.oilRigs)} rigs)";
+      }).join(", ");
+      this.SendMessage(command.target, "$theme$b[Top Rigs]$b $message", ",");
+    }
+    if (command.get(0) == "!topmines" && currentWorld != null) {
+      List<Country> listSort = new List.from(this.currentWorld.countries)..sort((Country a, Country b) {
+        return b.mines - a.mines;
+      });
+      String message = listSort.getRange(0, 10).map((Country c) {
+        return "${this.formatCountry(c)} (${formatNum(c.mines)} mines)";
+      }).join(", ");
+      this.SendMessage(command.target, "$theme$b[Top Mines]$b $message", ",");
+    }
     if (command.get(0) == "!info") {
       Country country = this.getCountry(command.get(1, command.getl()));
       if(country != null) {
