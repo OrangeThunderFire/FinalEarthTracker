@@ -182,6 +182,7 @@ class CoreModule extends Module {
         }
       }
     });
+    this.countriesToNotify.clear();
     String axisNeutralMessage = teamCountries.where((Map element) { return element["team"] == TEAM.AXIS && element["type"] == "neutralLoss"; })
                                       .map((Map element) { return "(${element["percent"]}%) ${formatCountry(element["country"])}"; })
                                       .join(", ");
