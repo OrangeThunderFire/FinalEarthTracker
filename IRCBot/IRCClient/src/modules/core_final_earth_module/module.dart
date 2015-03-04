@@ -411,9 +411,26 @@ class CoreModule extends Module {
         Map<TEAM, Map<String, int>> totals = new Map<TEAM, Map<String, num>>();
         num axisUnitsTotal = 0;
         num alliesUnitsTotal = 0;
-        num totalPercent = currentWorld.countries.length * 100;
+        List definedCountries = currentWorld.countries;
+        if (!command.get(1).isEmpty) {
+          String regionName = command.get(1, command.getl());
+          try {
+            if (regionName.toUpperCase() == "AMERICAS") {
+              definedCountries = new List.from(currentWorld.getCountriesByRegion("North America"));
+              definedCountries.addAll(currentWorld.getCountriesByRegion("South America"));
+            }
+            else {
+              definedCountries = currentWorld.getCountriesByRegion(regionName);
+            }
+          }
+          catch (E) {
+            this.SendMessage(command.target,"$theme$b[Totals]$b Could not find region $regionName");
+            return;
+          }
+        }
+        num totalPercent = definedCountries.length * 100;
         totals[TEAM.NEUTRAL] = new Map<String, num>();
-        currentWorld.countries.forEach((Country c) {
+        definedCountries.forEach((Country c) {
           if (!totals.containsKey(c.controllingTeam)) {
             totals[c.controllingTeam] = new Map<String, int>();
           }
@@ -447,8 +464,8 @@ class CoreModule extends Module {
         " $b${formatNum(axisUnitsTotal)}$b units - ${formatTeam("Allies")} $b${formatNum(alliesUnitsTotal)}$b units");
         totals.forEach((TEAM team, Map vars) {
           this.SendMessage(command.target, "$theme$b[Stats]$b ${formatTeam(convertTeamToString(team))} has"
-          " $b${formatNum(vars["factories"])}$b factories, $b${formatNum(vars["mines"])}$b mines, $b${formatNum(vars["oilRigs"])}$b"
-          " and a total map percentage of ${(((vars["totalPercent"] / totalPercent) as num) * 100).round()}%. "
+          " $b${formatNum(vars["factories"])}$b factories, $b${formatNum(vars["mines"])}$b mines, $b${formatNum(vars["oilRigs"])} rigs$b"
+          " and a total ${command.get(1).isEmpty ? "map":"region"} percentage of ${(((vars["totalPercent"] / totalPercent) as num) * 100).round()}%. "
            "They currently have $b${formatNum(vars["axisUnits"])} ${formatTeam("Axis")}$b units and $b${formatNum(vars["alliesUnits"])} ${formatTeam("Allies")}$b fighting in their countries.");
 
         });
