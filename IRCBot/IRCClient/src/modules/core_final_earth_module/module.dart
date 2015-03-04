@@ -239,7 +239,12 @@ class CoreModule extends Module {
     }
   }
   String formatNum (num number) {
-    return "${new NumberFormat("###,###,###,###,###", "en_US").format(number.round())}";
+    if (number != null) {
+      return "${new NumberFormat("###,###,###,###,###", "en_US").format(number.round())}";
+    }
+    else {
+      return "0";
+    }
   }
 
   Country getCountry (String nameOrCountryCode) {
@@ -465,7 +470,7 @@ class CoreModule extends Module {
         totals.forEach((TEAM team, Map vars) {
           this.SendMessage(command.target, "$theme$b[Stats]$b ${formatTeam(convertTeamToString(team))} has"
           " $b${formatNum(vars["factories"])}$b factories, $b${formatNum(vars["mines"])}$b mines, $b${formatNum(vars["oilRigs"])} rigs$b"
-          " and a total ${command.get(1).isEmpty ? "map":"region"} percentage of ${(((vars["totalPercent"] / totalPercent) as num) * 100)}%. "
+          " and a total ${command.get(1).isEmpty ? "map":"region"} percentage of ${(((vars["totalPercent"] / totalPercent) as num) * 100).round()}%. "
            "They currently have $b${formatNum(vars["axisUnits"])} ${formatTeam("Axis")}$b units and $b${formatNum(vars["alliesUnits"])} ${formatTeam("Allies")}$b fighting in their countries.");
 
         });
