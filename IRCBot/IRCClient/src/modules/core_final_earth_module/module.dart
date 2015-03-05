@@ -85,7 +85,7 @@ class CoreModule extends Module {
 
   String formatCountry (Country country) {
     return "${formatTeam(convertTeamToString(country.controllingTeam),country.name)}"
-    " (${country.control == 0 ? "$k040%$theme" : formatTeam("Allies","${country.control}%")}|${formatTeam("Axis", country.axisUnits)}|"
+    " (${country.control == 0 ? "${k}040%$theme" : formatTeam("Allies","${country.control}%")}|${formatTeam("Axis", country.axisUnits)}|"
     "${formatTeam("Allies", country.alliesUnits)})";
   }
 
