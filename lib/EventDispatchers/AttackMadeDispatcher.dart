@@ -126,9 +126,9 @@ class AttackMadeDispatcher extends FinalEarthDispatcher {
     List<UnitAmount> unitTallys = new List<UnitAmount>();
     int unitLostTotal;
     for (int i = 0; i < trs.length; i++) {
-      if (i+1 == trs.length) {
+      if (i == 0) {
 
-        unitLostTotal = num.parse(trs[i].text.trim().replaceAll(",", "").replaceAll("(", "").replaceAll(")", "").replaceAll(r"$", ""), (String e) {
+        unitLostTotal = num.parse(trs[i].querySelector("td")[1].text.trim().replaceAll(",", "").replaceAll("(", "").replaceAll(")", "").replaceAll(r"$", ""), (String e) {
           return 0;
         });
       }
