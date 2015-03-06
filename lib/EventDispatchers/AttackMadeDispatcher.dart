@@ -128,7 +128,7 @@ class AttackMadeDispatcher extends FinalEarthDispatcher {
     for (int i = 0; i < trs.length; i++) {
       if (i == 0) {
 
-        unitLostTotal = num.parse(trs[i].querySelector("td")[1].text.trim().replaceAll(",", "").replaceAll("(", "").replaceAll(")", "").replaceAll(r"$", ""), (String e) {
+        unitLostTotal = num.parse(trs[i].querySelectorAll("td")[1].text.trim().replaceAll(",", "").replaceAll("(", "").replaceAll(")", "").replaceAll(r"$", ""), (String e) {
           return 0;
         });
       }
