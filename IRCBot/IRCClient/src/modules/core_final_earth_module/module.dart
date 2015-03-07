@@ -408,6 +408,36 @@ class CoreModule extends Module {
         }
       }
     }
+    if (command.get(0) == "!gds") {
+      if (command.get(1) != "" && currentWorld != null) {
+        String regionName = command.get(1, command.getl());
+        try {
+          List<Country> listSort = new List.from(this.currentWorld.getCountriesByRegion(regionName))
+            ..sort((Country a, Country b) {
+            return b.groundDefences - a.groundDefences;
+          });
+          String message = listSort.getRange(0, 10).map((Country c) {
+            return "${this.formatCountry(c)} (${formatNum(c.mines)} mines)";
+          }).join(", ");
+          this.SendMessage(command.target, "$theme$b[Top GDs]$b $message", ",");
+        }
+        catch (E) {
+          this.SendMessage(command.target, "$theme$b[Ground Defence]$b Could not find that region");
+        }
+      }
+    }
+    if (command.get(0) == "!hitup") {
+      if (currentWorld != null) {
+        String regionName = command.get(1, command.getl());
+        try {
+          List<Country> region = currentWorld.getCountriesByRegion(regionName);
+
+        }
+        catch (E) {
+          this.SendMessage(command.target, "$b$theme[HitUp]$b Could not find a region with that name");
+        }
+      }
+    }
     if (command.get(0) == "!module") {
       this.SendMessage(command.target,"Module VERSION $version");
     }
