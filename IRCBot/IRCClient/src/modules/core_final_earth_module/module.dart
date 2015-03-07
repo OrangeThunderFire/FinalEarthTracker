@@ -141,10 +141,10 @@ class CoreModule extends Module {
         Country prev = new Country.fromCountryJson(data["previousCountry"]);
         int change = c.groundDefences - prev.groundDefences;
         if (change > 0) {
-          this.SendMessage(new ChannelName("#Allies"), "$b$theme[GDs]$b In ${this.formatCountry(c)} $b${change}$b ground defences has been built, totalling ${c.groundDefences}");
+          this.SendMessage(new ChannelName("#Allies"), "$b$theme[GDs]$b In ${this.formatCountry(c)} $b${change}$b ground defences have been built, totalling ${c.groundDefences}");
         }
         else {
-          this.SendMessage(new ChannelName("#Allies"), "$b$theme[GDs]$b In ${this.formatCountry(c)} $b${0-change}$b ground defences has been destroyed giving a new total of ${c.groundDefences}");
+          this.SendMessage(new ChannelName("#Allies"), "$b$theme[GDs]$b In ${this.formatCountry(c)} $b${0-change}$b ground defences have been destroyed giving a new total of ${c.groundDefences}");
         }
       }
       if (data["changedFields"].contains("control")) {
