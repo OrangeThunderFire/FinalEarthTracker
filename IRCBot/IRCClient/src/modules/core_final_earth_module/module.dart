@@ -417,7 +417,7 @@ class CoreModule extends Module {
             return b.groundDefences - a.groundDefences;
           });
           String message = listSort.getRange(0, 10).map((Country c) {
-            return "${this.formatCountry(c)} (${formatNum(c.mines)} mines)";
+            return "${this.formatCountry(c)} (${formatNum(c.groundDefences)} gds)";
           }).join(", ");
           this.SendMessage(command.target, "$theme$b[Top GDs]$b $message", ",");
         }
