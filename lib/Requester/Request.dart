@@ -43,7 +43,7 @@ class Request {
     }).catchError((e) {
         Request.log.warning("Caught error: $e");
         return reQueue();
-    }, test: (error) => this._checkIfExceptionIsToBeIgnored(error));
+    });
   }
 
   Future<http.Response> _request () {
