@@ -40,12 +40,10 @@ class MongoUserRepository implements UserRepository {
     Db database = await MongoInstance.mongoDb;
     DbCollection collection =database.collection("users");
     List<Unit> units = Unit.getByType(type);
-    List<Map> or = units.map((Unit e) {
-      Map m = new Map();
-      m["unitID"] = e.ID;
-      return m;
-    });
-    String orReq = JSON.encode(or);
+    String or = units.map((Unit e) {
+      return '{ "unitID": "${e.ID}" }';
+    }).join(", ");
+    String orReq = "[ $or ]";
     String query = '{ "knownUnits": [ \$elemMatch: { \$or: $orReq } ] }';
     print(query);
     List user = await collection.find(jsQuery(query));
