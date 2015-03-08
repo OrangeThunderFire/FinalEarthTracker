@@ -46,7 +46,7 @@ class MongoUserRepository implements UserRepository {
       print("OR REQ");
       List<Map> orReq = units.map((Unit e) {
         return {
-            "unitID": e.ID
+            "unitID": "${e.ID}"
         };
       }).toList();
       print(orReq);
