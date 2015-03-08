@@ -11,7 +11,7 @@ class FindUnitType extends ClientPacket {
 
   void handlePacket(WebSocketHandler wsh, Client client) async {
     try {
-      List<User> users = await _userRepo.whereHasUnitType(UnitType[this.typeID]);
+      List<User> users = await _userRepo.whereHasUnitType(UnitType.values[this.typeID]);
       client.sendPacket(new FoundUnitTypes(this.rID, users));
     }
     catch (E) {
