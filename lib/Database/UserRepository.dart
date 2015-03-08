@@ -39,12 +39,21 @@ class MongoUserRepository implements UserRepository {
   Future<List<User>> whereHasUnitType (UnitType type) async {
     Db database = await MongoInstance.mongoDb;
     DbCollection collection =database.collection("users");
-    List<Unit> units = Unit.getByType(type);
-    print(units);
-    List<Map> orReq = units.map((Unit e) {
-      return { "unitID": e.ID };
-    });
-    print(orReq);
+    try {
+      List<Unit> units = Unit.getByType(type);
+      print("UNITS");
+      print(units);
+      print("OR REQ");
+      List<Map> orReq = units.map((Unit e) {
+        return {
+            "unitID": e.ID
+        };
+      });
+      print(orReq);
+    }
+    catch (E) {
+      print(E);
+    }
     List user = await collection.find({ "knownUnits": { "\$elemMatch": { "\$or": orReq } }});
     if (user != null) {
       List<User> users = new List<User>();
