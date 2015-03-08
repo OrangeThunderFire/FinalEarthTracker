@@ -4,7 +4,8 @@ part of FinalEarthCrawler;
 enum CLIENT_PACKETS {
   SUBSCRIBE_TO_EVENT,
   UNSUBSCRIBE_FROM_EVENT,
-  GET_USER_DATA
+  GET_USER_DATA,
+  FIND_UNIT_TYPE
 }
 
 /// TODO: Work out a better way of doing this.

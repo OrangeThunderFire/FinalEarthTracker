@@ -18,12 +18,14 @@ FACILITY_UPDATE_EVENT,
 TRAVEL_DETECT_EVENT,
 ATTACK_MADE_EVENT,
 USER_DATA_RESPONSE,
-USER_NOT_FOUND
+USER_NOT_FOUND,
+FOUND_UNIT_TYPES
 }
 enum CLIENT_PACKETS {
 SUBSCRIBE_TO_EVENT,
 UNSUBSCRIBE_FROM_EVENT,
-GET_USER_DATA
+GET_USER_DATA,
+FIND_UNIT_TYPE
 }
 
 String theme = "${k}07";
@@ -69,6 +71,10 @@ class CoreModule extends Module {
 
   void getUser (String userName) {
     this.socket.add(JSON.encode({ "ID": CLIENT_PACKETS.GET_USER_DATA.index, "name": userName }));
+  }
+
+  void getUnitType (UnitType type) {
+    this.socket.add(JSON.encode({ "ID": CLIENT_PACKETS.FIND_UNIT_TYPE.index, "typeID": type.index }));
   }
 
   String formatTeam (String team,[ dynamic message = null]) {
@@ -127,6 +133,9 @@ class CoreModule extends Module {
     }
     if (data["ID"] == SERVER_PACKETS.WORLD_UPDATE_EVENT.index) {
       currentWorld = new World.fromWorldJson(data["world"]);
+    }
+    if (data["ID"] == SERVER_PACKETS.FOUND_UNIT_TYPES.index) {
+      this.SendMessage(new ChannelName("#Allies"), "Got response from server ${data["users"].length}");
     }
 
     if (data["ID"] == SERVER_PACKETS.COUNTRY_UPDATE_EVENT.index) {
@@ -282,6 +291,11 @@ class CoreModule extends Module {
     if (command.get(0) == "!sub") {
       this.SendMessage(command.target,Language.get("SUBSCRIBE",[command.get(1)]));
       subscribeEvent(command.get(1));
+    }
+
+    if (command.get(0) == "!testFind") {
+      this.SendMessage(command.target, "Sending command to server... TANKS");
+      this.getUnitType(UnitType.TANK);
     }
     if (command.get(0) == "!calc") {
       String s2on = command.get(1, command.getl());

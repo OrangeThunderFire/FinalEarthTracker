@@ -37,17 +37,28 @@ class MongoUserRepository implements UserRepository {
   }
 
   Future<List<User>> whereHasUnitType (UnitType type) async {
-//    Db database = await MongoInstance.mongoDb;
-//    DbCollection collection =database.collection("users");
-//    Map user = await collection.find({
-//
-//    });
-//    if (user != null) {
-//      return new User.fromJson(user);
-//    }
-//    else {
-//      return;
-//    }
+    Db database = await MongoInstance.mongoDb;
+    DbCollection collection =database.collection("users");
+    List<Unit> units = Unit.getByType(type);
+    List<Map> or = units.map((Unit e) {
+      Map m = new Map();
+      m["unitID"] = e.ID;
+      return m;
+    });
+    String orReq = JSON.encode(or);
+    String query = '{ "knownUnits": [ \$elemMatch: { \$or: $orReq } ] }';
+    print(query);
+    List user = await collection.find(jsQuery(query));
+    if (user != null) {
+      List<User> users = new List<User>();
+      user.forEach((Map user) {
+        users.add(new User.fromJson(user));
+      });
+      return users;
+    }
+    else {
+      return new List<User>();
+    }
   }
 
   Future<User> getById (int id) async {

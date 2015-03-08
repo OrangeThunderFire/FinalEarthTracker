@@ -8,7 +8,8 @@ enum SERVER_PACKETS {
   TRAVEL_DETECT_EVENT,
   ATTACK_MADE_EVENT,
   USER_DATA_RESPONSE,
-  USER_NOT_FOUND
+  USER_NOT_FOUND,
+  FOUND_UNIT_TYPES
 }
 
 abstract class ServerPacket extends Boilerplate {

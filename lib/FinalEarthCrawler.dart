@@ -45,6 +45,7 @@ part "WebSocket/ClientPackets/ClientPacket.dart";
 part "WebSocket/ClientPackets/SubscribeToEvent.dart";
 part "WebSocket/ClientPackets/UnsubscribeFromEvent.dart";
 part "WebSocket/ClientPackets/GetUserData.dart";
+part "WebSocket/ClientPackets/FindUnitType.dart";
 part "WebSocket/ServerPackets/ServerPacket.dart";
 part "WebSocket/ServerPackets/DisconnectServerPacket.dart";
 part "WebSocket/ServerPackets/WorldUpdatePacket.dart";
@@ -55,6 +56,7 @@ part "WebSocket/ServerPackets/TravelDetectPacket.dart";
 part "WebSocket/ServerPackets/AttackMadePacket.dart";
 part "WebSocket/ServerPackets/UserDataResponse.dart";
 part "WebSocket/ServerPackets/UserNotFoundPacket.dart";
+part "WebSocket/ServerPackets/FoundUnitTypes.dart";
 
 class FinalEarthCrawler {
   Requester _requester = new Requester(interval: 2000);
