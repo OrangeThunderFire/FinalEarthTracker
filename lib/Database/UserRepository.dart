@@ -45,7 +45,7 @@ class MongoUserRepository implements UserRepository {
       return { "unitID": e.ID };
     });
     print(orReq);
-    List user = await collection.find({ "knownUnits": { "\$elemMatch": { "\$or": $orReq } }});
+    List user = await collection.find({ "knownUnits": { "\$elemMatch": { "\$or": orReq } }});
     if (user != null) {
       List<User> users = new List<User>();
       user.forEach((Map user) {
