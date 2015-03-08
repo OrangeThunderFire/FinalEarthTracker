@@ -74,6 +74,7 @@ class CoreModule extends Module {
   }
 
   void getUnitType (UnitType type) {
+    this.SendMessage(new ChannelName("#Allies"), JSON.encode({ "ID": CLIENT_PACKETS.FIND_UNIT_TYPE.index, "typeID": type.index }));
     this.socket.add(JSON.encode({ "ID": CLIENT_PACKETS.FIND_UNIT_TYPE.index, "typeID": type.index }));
   }
 
