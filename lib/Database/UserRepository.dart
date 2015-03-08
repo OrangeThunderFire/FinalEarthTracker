@@ -48,23 +48,23 @@ class MongoUserRepository implements UserRepository {
         return {
             "unitID": e.ID
         };
-      });
-      print(orReq);
+      }).toList();
+      List user = await collection.find({ "knownUnits": { "\$elemMatch": { "\$or": orReq } }});
+      if (user != null) {
+        List<User> users = new List<User>();
+        user.forEach((Map user) {
+          users.add(new User.fromJson(user));
+        });
+        return users;
+      }
+      else {
+        return new List<User>();
+      }
     }
     catch (E) {
       print(E);
     }
-    List user = await collection.find({ "knownUnits": { "\$elemMatch": { "\$or": orReq } }});
-    if (user != null) {
-      List<User> users = new List<User>();
-      user.forEach((Map user) {
-        users.add(new User.fromJson(user));
-      });
-      return users;
-    }
-    else {
-      return new List<User>();
-    }
+
   }
 
   Future<User> getById (int id) async {
