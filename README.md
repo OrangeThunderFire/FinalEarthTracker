@@ -10,13 +10,12 @@ To run:
 
 cd into `bin`. then run the command:
 
-`dart --enable-async main.dart -u <username> -p <password>`
+`dart --enable-async main.dart -u <username> -p <password> -l <lastLogID>`
 
 And log tracking will begin.
 
-To run the IRC bot download the IRCClient repository from my github, place the core module folder into the folder called IRCClient.
 
-Then run `dart TestBot.dart` to begin the IRC bot.
+Then run `dart TestBot.dart` to begin the IRC bot in the /IRCBot/IRClient/src' folder
 
 To run the website jump into the web directory and opeen index.html. Its all using websockets the core server is hosting on port 8080.
 
